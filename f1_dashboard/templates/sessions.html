@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Sessions</h2>
+{% if session.get('admin_id') %}
+<form method="POST" action="{{ url_for('add_session') }}" class="row g-2 mb-4">
+  <select name="meeting_key" class="form-control col">
+    {% for m in meetings %}<option value="{{ m.meeting_key }}">{{ m.meeting_name }}</option>{% endfor %}
+  </select>
+  <input name="session_name" placeholder="Session Name" class="form-control col" required>
+  <select name="session_type" class="form-control col">
+    <option>Practice</option><option>Qualifying</option><option>Sprint</option><option>Race</option>
+  </select>
+  <input name="date_start" type="datetime-local" class="form-control col">
+  <input name="date_end" type="datetime-local" class="form-control col">
+  <button class="btn btn-success col-auto">Add</button>
+</form>
+{% endif %}
+
+<table class="table table-striped">
+  <thead><tr><th>ID</th><th>Meeting</th><th>Name</th><th>Type</th><th>Start</th>{% if session.get('admin_id') %}<th>Action</th>{% endif %}</tr></thead>
+  <tbody>
+  {% for s in sessions %}
+    <tr>
+      <td>{{ s.session_key }}</td><td>{{ s.meeting_name }}</td><td>{{ s.session_name }}</td><td>{{ s.session_type }}</td><td>{{ s.date_start }}</td>
+      {% if session.get('admin_id') %}
+      <td><form method="POST" action="{{ url_for('delete_session', session_key=s.session_key) }}"><button class="btn btn-danger btn-sm">Delete</button></form></td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Car Telemetry</h2>
+{% if session.get('admin_id') %}
+<form method="POST" action="{{ url_for('add_telemetry') }}" class="row g-2 mb-4">
+  <select name="session_key" class="form-control col">
+    {% for s in sessions %}<option value="{{ s.session_key }}">{{ s.session_name }}</option>{% endfor %}
+  </select>
+  <input name="driver_number" placeholder="Driver No" class="form-control col">
+  <input name="speed" placeholder="Speed" class="form-control col">
+  <input name="throttle" placeholder="Throttle 0-1" class="form-control col">
+  <input name="brake" placeholder="Brake 0-1" class="form-control col">
+  <input name="gear" placeholder="Gear" class="form-control col">
+  <input name="rpm" placeholder="RPM" class="form-control col">
+  <input name="drs" placeholder="DRS" class="form-control col">
+  <button class="btn btn-success col-auto">Add</button>
+</form>
+{% endif %}
+<table class="table table-striped table-sm">
+  <thead><tr><th>Session</th><th>Driver</th><th>Speed</th><th>Throttle</th><th>Brake</th><th>Gear</th><th>RPM</th><th>DRS</th>{% if session.get('admin_id') %}<th>Action</th>{% endif %}</tr></thead>
+  <tbody>
+  {% for t in telemetry %}
+    <tr>
+      <td>{{ t.session_key }}</td><td>{{ t.driver_number }}</td><td>{{ t.speed }}</td><td>{{ t.throttle }}</td><td>{{ t.brake }}</td><td>{{ t.gear }}</td><td>{{ t.rpm }}</td><td>{{ t.drs }}</td>
+      {% if session.get('admin_id') %}
+      <td><form method="POST" action="{{ url_for('delete_telemetry', telemetry_id=t.telemetry_id) }}"><button class="btn btn-danger btn-sm">Delete</button></form></td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

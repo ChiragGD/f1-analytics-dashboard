@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Site Map & Stats</h2>
+<ul>
+  <li><a href="{{ url_for('meetings') }}">Meetings</a></li>
+  <li><a href="{{ url_for('sessions') }}">Sessions</a></li>
+  <li><a href="{{ url_for('drivers') }}">Drivers</a></li>
+  <li><a href="{{ url_for('leaderboard') }}">Leaderboard</a></li>
+  <li><a href="{{ url_for('telemetry') }}">Telemetry</a></li>
+  <li><a href="{{ url_for('weather') }}">Weather</a></li>
+</ul>
+<hr>
+<div class="row">
+{% for k,v in stats.items() %}
+  <div class="col-md-3 mb-2">
+    <div class="card">
+      <div class="card-body text-center">
+        <h5>{{ k|capitalize }}</h5>
+        <p class="display-6">{{ v }}</p>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

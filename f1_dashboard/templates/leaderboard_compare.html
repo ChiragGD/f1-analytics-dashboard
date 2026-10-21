@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4">Compare Two Drivers</h2>
+
+<form method="GET" class="mb-3">
+  <label class="form-label">Select Session:</label>
+  <select name="session" class="form-select w-auto d-inline">
+    {% for s in sessions %}
+      <option value="{{ s.session_key }}" {% if s.session_key == selected_session|int %}selected{% endif %}>{{ s.session_name }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn btn-primary">Load</button>
+</form>
+
+{% if drivers %}
+<form method="POST" class="mb-4">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-4">
+      <label class="form-label">Driver 1</label>
+      <select name="driver1" class="form-select">
+        {% for d in drivers %}
+          <option value="{{ d.driver_number }}">{{ d.full_name }} (#{{ d.driver_number }})</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Driver 2</label>
+      <select name="driver2" class="form-select">
+        {% for d in drivers %}
+          <option value="{{ d.driver_number }}">{{ d.full_name }} (#{{ d.driver_number }})</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <button class="btn btn-success w-100">Compare</button>
+    </div>
+  </div>
+</form>
+{% endif %}
+
+{% if result_data %}
+<h4>Results Comparison</h4>
+<div class="row mt-3">
+  {% for r in result_data %}
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <h5 class="card-title">{{ r.full_name }}</h5>
+        <p><strong>Position:</strong> {{ r.position or 'N/A' }}</p>
+        <p><strong>Points:</strong> {{ r.points or 0 }}</p>
+        <div class="progress" style="height: 20px;">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% elif result_data is not none %}
+<div class="alert alert-warning">No data found for selected drivers.</div>
+{% endif %}
+{% endblock %}

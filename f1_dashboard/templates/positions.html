@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Driver Positions & Points</h2>
+
+<form method="GET" class="mb-3">
+  <label>Select Session:</label>
+  <select name="session_key" class="form-select w-auto d-inline">
+    {% for s in sessions %}
+      <option value="{{ s.session_key }}" {% if s.session_key == session_key|int %}selected{% endif %}>{{ s.session_name }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn btn-primary">Load</button>
+</form>
+
+{% if drivers %}
+<table class="table table-striped align-middle">
+  <thead>
+    <tr>
+      <th>No</th><th>Driver</th><th>Position</th><th>Points</th>
+      {% if session.get('admin_id') %}<th>Action</th>{% endif %}
+      <th>Compare</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for d in drivers %}
+    <tr>
+      <td>{{ d.driver_number }}</td>
+      <td>{{ d.full_name }}</td>
+      <td>{{ d.position or '-' }}</td>
+      <td>{{ d.points or '-' }}</td>
+
+      {% if session.get('admin_id') %}
+      <td>
+        <form method="POST" class="row g-1 align-items-center">
+          <input type="hidden" name="driver_number" value="{{ d.driver_number }}">
+          <div class="col-auto">
+            <input name="position" placeholder="Pos" class="form-control form-control-sm" value="{{ d.position or '' }}" style="width:70px;">
+          </div>
+          <div class="col-auto">
+            <input name="points" placeholder="Pts" class="form-control form-control-sm" value="{{ d.points or '' }}" style="width:70px;">
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-sm btn-success">Save</button>
+          </div>
+        </form>
+      </td>
+      {% endif %}
+
+      <td>
+        <a href="{{ url_for('compare_leaderboard', session=session_key, d1=d.driver_number, d2=0) }}" class="btn btn-sm btn-outline-primary">
+          Compare
+        </a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="text-muted">No drivers found for this session.</p>
+{% endif %}
+{% endblock %}

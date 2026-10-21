@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Weather Data</h2>
+<form method="POST" class="row g-2 mb-3">
+  <input name="location" placeholder="City,Country" class="form-control col" value="{{ weather.location if weather.location else '' }}">
+  <button class="btn btn-primary col-auto">Fetch</button>
+</form>
+{% if weather.error %}
+  <div class="alert alert-danger">{{ weather.error }}</div>
+{% else %}
+  <div class="card p-3 shadow-sm" style="max-width: 400px;">
+    <h4>{{ weather.location }}</h4>
+    <p>🌡️ Temperature: {{ weather.temperature }}</p>
+    <p>💧 Humidity: {{ weather.humidity }}</p>
+    <p>🌬️ Wind: {{ weather.wind_speed }}</p>
+    <p>☁️ Condition: {{ weather.conditions }}</p>
+  </div>
+{% endif %}
+{% endblock %}

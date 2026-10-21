@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Admin Registration</h2>
+<form method="POST">
+  <div class="mb-3">
+    <label>Admin Name</label>
+    <input type="text" name="admin_name" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label>Password</label>
+    <input type="password" name="admin_password" class="form-control" required>
+  </div>
+  <button type="submit" class="btn btn-warning">Register Admin</button>
+{% endblock %}

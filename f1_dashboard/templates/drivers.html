@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Drivers</h2>
+{% if session.get('admin_id') %}
+<form method="POST" action="{{ url_for('add_driver') }}" class="row g-2 mb-4">
+  <select name="session_key" class="form-control col">
+    {% for s in sessions %}<option value="{{ s.session_key }}">{{ s.session_name }}</option>{% endfor %}
+  </select>
+  <input name="driver_number" placeholder="Number" class="form-control col">
+  <input name="full_name" placeholder="Full Name" class="form-control col">
+  <input name="broadcast_name" placeholder="Short" class="form-control col">
+  <input name="team_name" placeholder="Team" class="form-control col">
+  <input name="team_colour" placeholder="Colour hex" class="form-control col">
+  <button class="btn btn-success col-auto">Add</button>
+</form>
+{% endif %}
+<table class="table table-bordered table-hover">
+  <thead><tr><th>No</th><th>Name</th><th>Team</th><th>Session</th>{% if session.get('admin_id') %}<th>Action</th>{% endif %}</tr></thead>
+  <tbody>
+  {% for d in drivers %}
+    <tr>
+      <td>{{ d.driver_number }}</td><td>{{ d.full_name }}</td><td>{{ d.team_name }}</td><td>{{ d.session_name }}</td>
+      {% if session.get('admin_id') %}
+      <td><form method="POST" action="{{ url_for('delete_driver', driver_session_id=d.driver_number) }}"><button class="btn btn-danger btn-sm">Delete</button></form></td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
